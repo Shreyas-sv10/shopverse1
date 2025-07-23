@@ -1,0 +1,75 @@
+// ---------- Setup ----------
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const products = document.querySelectorAll('.product');
+const cartIcon = document.getElementById('cart-count');
+const cartTable = document.getElementById('cart-items');
+const totalDisplay = document.getElementById('total-price');
+
+// ---------- Add to Cart ----------
+function addToCart(id, name, price, img) {
+  const existing = cart.find(item => item.id === id);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id, name, price, img, qty: 1 });
+  }
+  saveCart();
+  updateCartUI();
+  alert(`${name} added to cart`);
+}
+
+// ---------- Remove from Cart ----------
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  saveCart();
+  updateCartUI();
+}
+
+// ---------- Update Quantity ----------
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id);
+  saveCart();
+  updateCartUI();
+}
+
+// ---------- Save to Local Storage ----------
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// ---------- Load and Render Cart ----------
+function updateCartUI() {
+  if (!cartTable || !cartIcon) return;
+
+  cartTable.innerHTML = '';
+  let total = 0;
+
+  cart.forEach(item => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><img src="${item.img}" height="50"/></td>
+      <td>${item.name}</td>
+      <td>₹${item.price}</td>
+      <td>
+        <button onclick="changeQty('${item.id}', -1)">-</button>
+        ${item.qty}
+        <button onclick="changeQty('${item.id}', 1)">+</button>
+      </td>
+      <td>₹${item.qty * item.price}</td>
+      <td><button onclick="removeFromCart('${item.id}')">X</button></td>
+    `;
+    total += item.qty * item.price;
+    cartTable.appendChild(row);
+  });
+
+  cartIcon.innerText = cart.length;
+  totalDisplay.innerText = `Total: ₹${total}`;
+}
+
+// ---------- Load on Start ----------
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartUI();
+});
