@@ -201,3 +201,21 @@ document.querySelectorAll('.product').forEach((card, index) => {
   const productId = card.getAttribute('data-id') || `product-${index}`;
   renderReviews(card, productId);
 });
+// 🔍 Image Zoom Preview
+function openPreview(imgContainer) {
+  const img = imgContainer.querySelector('img');
+  const modal = document.getElementById('image-preview-modal');
+  const previewImg = document.getElementById('preview-image');
+  previewImg.src = img.src;
+  modal.style.display = "flex";
+}
+
+function closePreview() {
+  document.getElementById('image-preview-modal').style.display = "none";
+}
+
+// 🖼️ Change Main Image from Thumbnails (optional)
+function changeMainImage(thumbnail) {
+  const mainImage = thumbnail.closest('.product').querySelector('.main-product-img');
+  mainImage.src = thumbnail.src;
+}
