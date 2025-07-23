@@ -146,3 +146,58 @@ if (toggleTheme) {
     document.body.classList.add('dark-mode');
   }
 }
+// ⭐ Review & Rating Logic
+document.querySelectorAll('.submit-review').forEach((btn, index) => {
+  btn.addEventListener('click', () => {
+    const productCard = btn.closest('.product');
+    const productId = productCard.getAttribute('data-id') || `product-${index}`;
+    const reviewInput = productCard.querySelector('.review-input');
+    const reviewText = reviewInput.value.trim();
+    const stars = productCard.querySelectorAll('.star.selected');
+    const rating = stars.length;
+
+    if (reviewText === "" || rating === 0) {
+      alert("Please add a review and rating.");
+      return;
+    }
+
+    const review = { text: reviewText, rating: rating };
+    let reviews = JSON.parse(localStorage.getItem(`reviews-${productId}`)) || [];
+    reviews.push(review);
+    localStorage.setItem(`reviews-${productId}`, JSON.stringify(reviews));
+
+    reviewInput.value = "";
+    productCard.querySelectorAll('.star').forEach(star => star.classList.remove('selected'));
+    renderReviews(productCard, productId);
+  });
+});
+
+// ⭐ Star selection logic
+document.querySelectorAll('.star').forEach(star => {
+  star.addEventListener('click', () => {
+    const value = parseInt(star.getAttribute('data-value'));
+    const starGroup = star.parentElement.querySelectorAll('.star');
+    starGroup.forEach(s => s.classList.remove('selected'));
+    for (let i = 0; i < value; i++) {
+      starGroup[i].classList.add('selected');
+    }
+  });
+});
+
+// 💬 Render Reviews
+function renderReviews(productCard, productId) {
+  const reviewList = productCard.querySelector('.review-list');
+  const reviews = JSON.parse(localStorage.getItem(`reviews-${productId}`)) || [];
+  reviewList.innerHTML = reviews.map(r => `
+    <div style="border-top: 1px solid #ddd; padding: 5px 0;">
+      <div>${"⭐".repeat(r.rating)}</div>
+      <div>${r.text}</div>
+    </div>
+  `).join('');
+}
+
+// 🚀 Load reviews on startup
+document.querySelectorAll('.product').forEach((card, index) => {
+  const productId = card.getAttribute('data-id') || `product-${index}`;
+  renderReviews(card, productId);
+});
