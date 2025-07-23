@@ -124,3 +124,44 @@
   <script src="script.js"></script>
 </body>
 </html>
+<div class="controls" style="display: flex; gap: 10px; flex-wrap: wrap; padding: 20px;">
+  <!-- 🔍 Search -->
+  <input type="text" id="search" placeholder="Search products..." style="padding: 10px; border-radius: 8px; border: 1px solid #ccc; flex: 1;" />
+
+  <!-- 📂 Category Filter -->
+  <select id="category-filter" style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+    <option value="all">All Categories</option>
+    <option value="electronics">Electronics</option>
+    <option value="fashion">Fashion</option>
+    <option value="books">Books</option>
+    <!-- Add more categories here -->
+  </select>
+
+  <!-- 💰 Price Sort -->
+  <select id="price-sort" style="padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+    <option value="low">Price: Low to High</option>
+    <option value="high">Price: High to Low</option>
+  </select>
+
+  <!-- 💡 Dark Mode Toggle -->
+  <button id="dark-mode-toggle" style="padding: 10px 20px; border-radius: 8px; border: none; background-color: #333; color: white;">🌓 Toggle Dark Mode</button>
+
+  <!-- ❤️ Wishlist Icon -->
+  <div style="margin-left: auto; display: flex; align-items: center;">
+    <span style="font-size: 20px;">❤️ Wishlist: </span>
+    <span id="wishlist-count" style="margin-left: 6px; font-weight: bold; font-size: 20px;">0</span>
+  </div>
+</div>
+<!-- ⭐ Rating & Review Section -->
+<div class="review-section" style="margin-top: 10px;">
+  <div class="stars" data-product-id="PRODUCT_ID_HERE" style="margin-bottom: 5px;">
+    <span class="star" data-value="1">★</span>
+    <span class="star" data-value="2">★</span>
+    <span class="star" data-value="3">★</span>
+    <span class="star" data-value="4">★</span>
+    <span class="star" data-value="5">★</span>
+  </div>
+  <textarea class="review-input" placeholder="Write a review..." rows="2" style="width: 100%; border-radius: 6px; padding: 5px;"></textarea>
+  <button class="submit-review" style="margin-top: 5px; padding: 6px 12px; border-radius: 6px; background-color: #28a745; color: white; border: none;">Submit</button>
+  <div class="review-list" style="margin-top: 10px;"></div>
+</div>
