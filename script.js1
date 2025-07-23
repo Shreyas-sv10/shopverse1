@@ -73,3 +73,76 @@ function updateCartUI() {
 document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
 });
+// ---------- Wishlist Setup ----------
+let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+function toggleWishlist(id, name, price, img) {
+  const index = wishlist.findIndex(item => item.id === id);
+  if (index !== -1) {
+    wishlist.splice(index, 1);
+    alert(`${name} removed from wishlist`);
+  } else {
+    wishlist.push({ id, name, price, img });
+    alert(`${name} added to wishlist`);
+  }
+  localStorage.setItem('wishlist', JSON.stringify(wishlist));
+  updateWishlistUI();
+}
+
+function updateWishlistUI() {
+  const wishIcon = document.getElementById('wishlist-count');
+  if (wishIcon) wishIcon.innerText = wishlist.length;
+}
+
+// ---------- Search ----------
+const searchInput = document.getElementById('search');
+if (searchInput) {
+  searchInput.addEventListener('input', () => {
+    const term = searchInput.value.toLowerCase();
+    products.forEach(p => {
+      const name = p.querySelector('h3').innerText.toLowerCase();
+      p.style.display = name.includes(term) ? 'block' : 'none';
+    });
+  });
+}
+
+// ---------- Category Filter ----------
+const categorySelect = document.getElementById('category-filter');
+if (categorySelect) {
+  categorySelect.addEventListener('change', () => {
+    const category = categorySelect.value;
+    products.forEach(p => {
+      const cat = p.dataset.category;
+      p.style.display = category === 'all' || cat === category ? 'block' : 'none';
+    });
+  });
+}
+
+// ---------- Price Sort ----------
+const sortSelect = document.getElementById('price-sort');
+if (sortSelect) {
+  sortSelect.addEventListener('change', () => {
+    const container = document.querySelector('.product-list');
+    const sorted = Array.from(products).sort((a, b) => {
+      const pa = parseFloat(a.dataset.price);
+      const pb = parseFloat(b.dataset.price);
+      return sortSelect.value === 'low' ? pa - pb : pb - pa;
+    });
+    container.innerHTML = '';
+    sorted.forEach(p => container.appendChild(p));
+  });
+}
+
+// ---------- Dark Mode ----------
+const toggleTheme = document.getElementById('dark-mode-toggle');
+if (toggleTheme) {
+  toggleTheme.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+  });
+
+  const theme = localStorage.getItem('theme');
+  if (theme === 'dark') {
+    document.body.classList.add('dark-mode');
+  }
+}
